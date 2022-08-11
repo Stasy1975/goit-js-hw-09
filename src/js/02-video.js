@@ -13,24 +13,11 @@ import { throttle } from 'lodash';
 
 const iframe = document.querySelector('#vimeo-player');
 const player = new Player(iframe);
+let currentPlayTime = localStorage.getItem('videoplayer-current-time');
 
-player.on('play', function () {
-  console.log('played the video!');
-});
+player.setCurrentTime(currentPlayTime);
 
-player.getVideoTitle().then(function (title) {
-  console.log('title:', title);
-});
-
-let currentPlayTime = localStorage.getItem('videoplayer-current-time')
-  ? localStorage.getItem('videoplayer-current-time')
-  : 0;
-
-console.log(currentPlayTime);
-
-// player.setCurrentTime(currentPlayTime);
-
-// const onPlay = data =>
-//   localStorage.setItem('videoplayer-current-time', data.seconds);
+const onPlay = data =>
+  localStorage.setItem('videoplayer-current-time', data.seconds);
 
 player.on('timeupdate', throttle(onPlay, 1000));
