@@ -1,8 +1,8 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 function createPromise(position, delay) {
-  const shouldResolve = Math.random() > 0.3;
-  const promise = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
+    const shouldResolve = Math.random() > 0.3;
     setTimeout(() => {
       if (shouldResolve) {
         resolve({ position, delay });
@@ -11,7 +11,6 @@ function createPromise(position, delay) {
       }
     }, delay);
   });
-  return promise;
 }
 
 const refs = {
@@ -23,18 +22,21 @@ const refs = {
 };
 
 refs.button.addEventListener('click', onPromise);
+let delay = 0;
+let step = 0;
+let amount = 0;
 
 function onPromise(e) {
   e.preventDefault();
-  const delay = refs.delay.value;
-  const step = refs.step.value;
-  const amount = refs.amount.value;
+  delay = Number(refs.delay.value);
+  step = Number(refs.step.value);
+  amount = Number(refs.amount.value);
   onResullts(delay, step, amount);
 }
 
 function onResullts(delay, step, amount) {
   for (let i = 0; i < amount; i += 1) {
-    createPromise(i, delay + step * i)
+    createPromise(i + 1, delay + step * i)
       .then(({ position, delay }) => {
         Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
       })
